@@ -18,8 +18,30 @@ const drawData = (data) =>
     var canvas = document.getElementById("myCanvas");
     var ctx = canvas.getContext("2d");
 
-    
-    for (var x = 0; x < data.length; x++)
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const imgdata = imageData.data;
+    for (var i = 0; i < imgdata.length; i += 4) {
+        const colorIndex = i / 4;
+        const cx = colorIndex % canvas.width;
+        const cy = Math.floor(colorIndex / canvas.width);
+        
+        let r = g = b = 0;
+        
+        switch(data[cx][cy].state)
+        {
+            case HEALTHY: g = 255;break;
+            case DISEASED: r = 255;break;
+            case IMMUNE: g = b = 255;break;
+            case DECEASED: r = g = b = 0;break;
+            default : r = g = b = 128; 
+        }
+        
+
+        imgdata[i]     = r;     // red
+        imgdata[i + 1] = g; // green
+        imgdata[i + 2] = b; // blue
+    }
+/*    for (var x = 0; x < data.length; x++)
       for (var y = 0; y < data[x].length; y++)
       {
         switch(data[x][y].state)
@@ -30,8 +52,8 @@ const drawData = (data) =>
             case DECEASED: ctx.fillStyle = "#000000";break;
         }
         ctx.fillRect(x, y, 1, 1);
-      }
-    
+      }*/
+      ctx.putImageData(imageData,0,0);
 }
 
 const clearData = () => 
