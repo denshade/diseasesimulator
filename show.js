@@ -88,8 +88,9 @@ const stepData = (data, stepData) =>
     const width = data.length;
     const height = data[0].length;
     spreadDisease(data, width, height);
+    spreadDeath(data, width, height);
     decreaseCounters(data, width, height);
-    stepData.push([++step, [].concat.apply([], data).map(e => e.state).filter(e => e == DISEASED).length,[].concat.apply([], data).map(e => e.state).filter(e => e == DECEASED).length]);
+    addChartData(stepData, data);
 }
 
 const decreaseCounters = (data, width, height) => {
@@ -117,6 +118,22 @@ const infect = (d) => {
 }
 
 const spreadIfHealthy = (state) => state == HEALTHY ? DISEASED : state;
+const spreadDeath = (data, width, height) => {
+
+    deathRate = parseInt(document.getElementById("deathratediseased").value);
+    for (var x = 0; x < width; x++)
+    {
+        for (var y = 0; y < height; y++)
+        {
+            if (data[x][y].state == DISEASED) 
+            {
+                if (Math.random() < 1/deathRate) {
+                    data[x][y].state = DECEASED;
+                }
+            }
+        }
+    }
+}
 const spreadDisease = (data, width, height) => {
     let newData = [];
     for (var x = 0; x < width; x++)
@@ -158,6 +175,14 @@ const spreadDisease = (data, width, height) => {
     }
 }
 
+
+function addChartData(stepData, data) {
+    stepData.push([++step, countSpecificData(data, DISEASED), countSpecificData(data, DECEASED)]);
+}
+
+function countSpecificData(data, type) {
+    return [].concat.apply([], data).map(e => e.state).filter(e => e == type).length;
+}
 
 function drawChart() {
     var data = google.visualization.arrayToDataTable(chartdata);
