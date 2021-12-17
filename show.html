@@ -14,6 +14,10 @@
     <h1>Let's simulate!</h1>
     <label>Number of items width</label><input id="width" type="number" value="1000"><BR/>
     <label>Number of items height</label><input id="height" type="number" value="1000"><BR/>
+    <label>Days infectious</label><input id="infectious" type="number" value="10"><BR/>
+    <label>Days diseased</label><input id="diseased" type="number" value="10"><BR/>
+
+    <button class="btn btn-primary" id="step10">10 steps</button>
     <button class="btn btn-primary" id="step">Step</button>
     <button class="btn btn-danger" id="reset">Reset</button><BR/>
 
@@ -45,6 +49,11 @@
         }
         var width = document.getElementById("step").onclick = () => {
           stepData(data);
+          drawData(data);
+        }
+
+        var width = document.getElementById("step10").onclick = () => {
+          for (let i = 0; i < 10; i++) stepData(data);
           drawData(data);
         }
 

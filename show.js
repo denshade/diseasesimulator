@@ -3,9 +3,6 @@ const IMMUNE = 1;
 const DISEASED = 2;
 const DECEASED = 3;
 
-const days_infectious = 10;
-const days_diseased = 10;
-
 const healthyObj = {
     state : HEALTHY,
     disease_count_down : 0,
@@ -17,7 +14,7 @@ const drawData = (data) =>
 {
     var canvas = document.getElementById("myCanvas");
     var ctx = canvas.getContext("2d");
-
+    /*
     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
     const imgdata = imageData.data;
     for (var i = 0; i < imgdata.length; i += 4) {
@@ -41,7 +38,9 @@ const drawData = (data) =>
         imgdata[i + 1] = g; // green
         imgdata[i + 2] = b; // blue
     }
-/*    for (var x = 0; x < data.length; x++)
+    ctx.putImageData(imageData,0,0);
+    */
+    for (var x = 0; x < data.length; x++)
       for (var y = 0; y < data[x].length; y++)
       {
         switch(data[x][y].state)
@@ -52,8 +51,8 @@ const drawData = (data) =>
             case DECEASED: ctx.fillStyle = "#000000";break;
         }
         ctx.fillRect(x, y, 1, 1);
-      }*/
-      ctx.putImageData(imageData,0,0);
+      }
+      
 }
 
 const clearData = () => 
@@ -103,31 +102,35 @@ const decreaseCounters = (data, width, height) => {
 
 const infect = (d) => {
     d.state = DISEASED;
-    d.infectious_count_down = days_infectious;
-    d.disease_count_down = days_diseased;
+    d.infectious_count_down = document.getElementById("infectious").value;;
+    d.disease_count_down = document.getElementById("diseased").value;;
 }
 
+const spreadIfHealthy = (state) => state == HEALTHY ? DISEASED : state;
 const spreadDisease = (data, width, height) => {
+    let newData = [];
     for (var x = 0; x < width; x++)
     {
+        newDataRow = [];
         for (var y = 0; y < height; y++)
         {
+            newDataRow.push(data[x][y].state);
         }
+        newData.push(newDataRow);
     }
-    var newData = Array(height).fill().map(() => Array(height).fill(HEALTHY));
     for (var x = 0; x < width; x++)
     {
         for (var y = 0; y < height; y++)
         {
             if (data[x][y].state != DISEASED) continue;
             if (data[x][y].state == IMMUNE) continue;
-            if (x > 0 && y > 0) newData[x - 1][y - 1] = DISEASED;
-            if ( y > 0) newData[x][y - 1] = DISEASED;
-            if (x + 1 < width) newData[x + 1][y] = DISEASED;
-            if (x + 1 < width && y > 0) newData[x + 1][y - 1] = DISEASED;
-            if (x + 1 < width && y + 1 < height) newData[x + 1][y + 1] = DISEASED;
-            if (y + 1 < height) newData[x][y + 1] = DISEASED;
-            if (x > 0 && y + 1 < height) newData[x - 1][y + 1] = DISEASED;            
+            if (x > 0 && y > 0) newData[x - 1][y - 1] = spreadIfHealthy(newData[x - 1][y - 1]);
+            if ( y > 0) newData[x][y - 1] = spreadIfHealthy(newData[x][y - 1]);
+            if (x + 1 < width) newData[x + 1][y] = spreadIfHealthy(newData[x + 1][y]);
+            if (x + 1 < width && y > 0) newData[x + 1][y - 1] = spreadIfHealthy(newData[x + 1][y - 1]);
+            if (x + 1 < width && y + 1 < height) newData[x + 1][y + 1] = spreadIfHealthy(newData[x + 1][y + 1]);
+            if (y + 1 < height) newData[x][y + 1] = spreadIfHealthy(newData[x][y + 1]);
+            if (x > 0 && y + 1 < height) newData[x - 1][y + 1] = spreadIfHealthy(newData[x - 1][y + 1]);            
 
         }
     
