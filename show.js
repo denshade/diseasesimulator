@@ -52,7 +52,6 @@ const drawData = (data) =>
         }
         ctx.fillRect(x, y, 1, 1);
       }
-      
 }
 
 const clearData = () => 
@@ -71,15 +70,26 @@ const clearData = () =>
     return data;
 }
 
-const stepData = (data) => 
+const clearExistingData = (data, width, height) => 
+{
+    for (var x = 0; x < data.length; x++)
+    {
+      for (var y = 0; y < data[0].length; y++)
+      {
+          data[x][y].state = HEALTHY;
+      }
+    }
+    data[width/2][height/2].state = DISEASED;
+}
+
+const stepData = (data, stepData) => 
 {
     //spread disease
     const width = data.length;
     const height = data[0].length;
     spreadDisease(data, width, height);
     decreaseCounters(data, width, height);
-    
-
+    stepData.push([++step, [].concat.apply([], data).map(e => e.state).filter(e => e == DISEASED).length,[].concat.apply([], data).map(e => e.state).filter(e => e == DECEASED).length]);
 }
 
 const decreaseCounters = (data, width, height) => {
@@ -143,8 +153,22 @@ const spreadDisease = (data, width, height) => {
             if (data[x][y].state != DISEASED && newData[x][y] == DISEASED) {
                 infect(data[x][y]);
             }
-            //data[x][y].state = newData[x][y];    
         }
     
     }
 }
+
+
+function drawChart() {
+    var data = google.visualization.arrayToDataTable(chartdata);
+
+    var options = {
+      title: 'Disease progression',
+      curveType: 'function',
+      legend: { position: 'bottom' }
+    };
+
+    var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+
+    chart.draw(data, options);
+  }
