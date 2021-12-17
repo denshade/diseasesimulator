@@ -14,32 +14,6 @@ const drawData = (data) =>
 {
     var canvas = document.getElementById("myCanvas");
     var ctx = canvas.getContext("2d");
-    /*
-    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    const imgdata = imageData.data;
-    for (var i = 0; i < imgdata.length; i += 4) {
-        const colorIndex = i / 4;
-        const cx = colorIndex % canvas.width;
-        const cy = Math.floor(colorIndex / canvas.width);
-        
-        let r = g = b = 0;
-        
-        switch(data[cx][cy].state)
-        {
-            case HEALTHY: g = 255;break;
-            case DISEASED: r = 255;break;
-            case IMMUNE: g = b = 255;break;
-            case DECEASED: r = g = b = 0;break;
-            default : r = g = b = 128; 
-        }
-        
-
-        imgdata[i]     = r;     // red
-        imgdata[i + 1] = g; // green
-        imgdata[i + 2] = b; // blue
-    }
-    ctx.putImageData(imageData,0,0);
-    */
     for (var x = 0; x < data.length; x++)
       for (var y = 0; y < data[x].length; y++)
       {
@@ -125,11 +99,9 @@ const spreadDeath = (data, width, height) => {
     {
         for (var y = 0; y < height; y++)
         {
-            if (data[x][y].state == DISEASED) 
+            if (data[x][y].state == DISEASED && data[x][y].disease_count_down == 7 && Math.random() < 1/deathRate) 
             {
-                if (Math.random() < 1/deathRate) {
                     data[x][y].state = DECEASED;
-                }
             }
         }
     }
