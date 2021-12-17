@@ -135,12 +135,16 @@ const spreadDisease = (data, width, height) => {
     
     }
 
+    let spreadProbability = parseInt(document.getElementById("spreadprobability").value);
     for (var x = 0; x < width; x++)
     {
         for (var y = 0; y < height; y++)
         {
             if (data[x][y].state != DISEASED && newData[x][y] == DISEASED) {
-                infect(data[x][y]);
+                if (Math.random() < 1/spreadProbability)
+                {
+                    infect(data[x][y]);
+                }
             }
         }
     
