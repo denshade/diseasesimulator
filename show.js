@@ -174,8 +174,8 @@ const spreadDiseaseSpread = (data, width, height) => {
         }
         newData.push(newDataRow);
     }
-    const nrInfections = 3;
-    const maxSpreadDistance = 1000;
+    const nrInfections = document.getElementById("peoplereachdaily").value;
+    const maxSpreadDistance = document.getElementById("peoplereach").value;
     for (var x = 0; x < width; x++)
     {
         for (var y = 0; y < height; y++)
