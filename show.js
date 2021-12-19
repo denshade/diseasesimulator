@@ -61,7 +61,18 @@ const stepData = (data, stepData) =>
     //spread disease
     const width = data.length;
     const height = data[0].length;
-    spreadDisease(data, width, height);
+    var spreadStrat = document.getElementById("spreadstrategy");
+    var strat = spreadStrat.options[spreadStrat.selectedIndex].value;
+
+    switch (strat) {
+    case "superlocal":
+        spreadDiseaseSquare(data, width, height);
+        break;
+    case "randomspread":
+        spreadDiseaseSpread(data, width, height);
+        break;
+    
+    }
     spreadDeath(data, width, height);
     decreaseCounters(data, width, height);
     addChartData(stepData, data);
@@ -106,7 +117,8 @@ const spreadDeath = (data, width, height) => {
         }
     }
 }
-const spreadDisease = (data, width, height) => {
+
+const spreadDiseaseSquare = (data, width, height) => {
     let newData = [];
     for (var x = 0; x < width; x++)
     {
@@ -131,6 +143,52 @@ const spreadDisease = (data, width, height) => {
             if (y + 1 < height) newData[x][y + 1] = spreadIfHealthy(newData[x][y + 1]);
             if (x > 0 && y + 1 < height) newData[x - 1][y + 1] = spreadIfHealthy(newData[x - 1][y + 1]);            
 
+        }
+    
+    }
+
+    let spreadProbability = parseInt(document.getElementById("spreadprobability").value);
+    for (var x = 0; x < width; x++)
+    {
+        for (var y = 0; y < height; y++)
+        {
+            if (data[x][y].state != DISEASED && newData[x][y] == DISEASED) {
+                if (Math.random() < 1/spreadProbability)
+                {
+                    infect(data[x][y]);
+                }
+            }
+        }
+    
+    }
+}
+
+const spreadDiseaseSpread = (data, width, height) => {
+    let newData = [];
+    for (var x = 0; x < width; x++)
+    {
+        newDataRow = [];
+        for (var y = 0; y < height; y++)
+        {
+            newDataRow.push(data[x][y].state);
+        }
+        newData.push(newDataRow);
+    }
+    const nrInfections = 3;
+    const maxSpreadDistance = 1000;
+    for (var x = 0; x < width; x++)
+    {
+        for (var y = 0; y < height; y++)
+        {
+            if (data[x][y].state != DISEASED) continue;
+            if (data[x][y].state == IMMUNE) continue;
+            for (let k = 0; k< nrInfections; k++) {
+                const randX = Math.floor((Math.random() * maxSpreadDistance * 2) - maxSpreadDistance + x);
+                const randY = Math.floor((Math.random() * maxSpreadDistance * 2) - maxSpreadDistance + y);
+                if (randX > 0 && randX < width && randY > 0 && randY < height) {
+                    newData[randX][randY] = spreadIfHealthy(newData[randX][randY]);
+                }
+            }
         }
     
     }

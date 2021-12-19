@@ -12,17 +12,25 @@
   </head>
   <body>
     <h1>Let's simulate!</h1>
-    <label>Number of items width</label><input id="width" type="number" value="1000"><BR/>
-    <label>Number of items height</label><input id="height" type="number" value="1000"><BR/>
-    <label>Days infectious</label><input id="infectious" type="number" value="10"><BR/>
-    <label>Days diseased</label><input id="diseased" type="number" value="10"><BR/>
-    <label>Death rate diseased 1/x</label><input id="deathratediseased" type="number" value="50"><BR/>
-    <label>Death rate healthy 1/x</label><input id="deathratehealthy" type="number" value="10"><BR/>
-    <label>Probability of spreading per day infectious 1/x</label><input id="spreadprobability" type="number" value="2"><BR/>
-    <label>Spread strategy</label><select id="spreadstrategy">
+    <label>Number of items width</label>
+    <div class="input-group mb-3"><input class="form-control" id="width" type="number" value="1000"></div>
+    <label>Number of items height</label>
+    <div class="input-group mb-3"><input class="form-control" id="height" type="number" value="1000"></div>
+    <label>Days infectious</label>
+    <div class="input-group mb-3"><input class="form-control" id="infectious" type="number" value="10"></div>
+    <label>Days diseased</label>
+    <div class="input-group mb-3"><input class="form-control" id="diseased" type="number" value="10"></div>
+    <label>Death rate diseased 1/x</label>
+    <div class="input-group mb-3"><input class="form-control" id="deathratediseased" type="number" value="50"></div>
+    <label>Death rate healthy 1/x</label>
+    <div class="input-group mb-3"><input class="form-control" id="deathratehealthy" type="number" value="10"></div>
+    <label>Probability of spreading per day infectious 1/x</label>
+    <div class="input-group mb-3"><input class="form-control" id="spreadprobability" type="number" value="2"></div>
+    <label>Spread strategy</label>
+    <div class="input-group mb-3"><select class="form-control" id="spreadstrategy">
       <option value="superlocal">Only close neighbours spread, super local</option>
       <option value="randomspread">Random spread over population</option>
-    </select>
+    </select></div>
     <BR/>
 
 
